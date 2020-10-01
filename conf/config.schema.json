@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "maxLogCount": {
+      "type": "number",
+      "description": "The maximum number of logs stored at any one time (the oldest logs will be replace first).",
+      "default": 5000
+    }
+  }
+}
