@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "level": {
+      "type": "string",
+      "description": "The priority level of the log message",
+      "enum": [
+        "debug",
+        "info",
+        "success",
+        "warn",
+        "error",
+        "fatal"
+      ]
+    },
+    "module": {
+      "type": "string",
+      "description": "Module responsible for creating the log"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time log was created"
+    },
+    "data": {
+      "type": "array",
+      "description": "The data to be logged"
+    }
+  },
+  "required": ["level"]
+}
