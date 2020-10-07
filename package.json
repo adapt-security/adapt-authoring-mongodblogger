@@ -1,10 +1,10 @@
 {
-  "name": "adapt-authoring-mongologger",
+  "name": "adapt-authoring-mongodblogger",
   "version": "0.0.1",
   "description": "Stores application log messages to the MongoDBModule instance",
-  "homepage": "https://github.com/adaptlearning/adapt-authoring-mongologger",
+  "homepage": "https://github.com/adaptlearning/adapt-authoring-mongodblogger",
   "license": "GPL-3.0",
-  "repository": "github:adaptlearning/adapt-authoring-mongologger",
+  "repository": "github:adaptlearning/adapt-authoring-mongodblogger",
   "main": "index.js",
   "dependencies": {
     "adapt-authoring-api": "github:adaptlearning/adapt-authoring-api"

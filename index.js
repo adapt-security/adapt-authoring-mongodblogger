@@ -1,1 +1,1 @@
-module.exports = require('./lib/mongologgermodule');
+module.exports = require('./lib/MongoDBLoggerModule');
