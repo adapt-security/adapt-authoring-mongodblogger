@@ -4,12 +4,12 @@
   "description": "Stores application log messages to the MongoDBModule instance",
   "homepage": "https://github.com/adaptlearning/adapt-authoring-mongodblogger",
   "license": "GPL-3.0",
-  "repository": "github:adaptlearning/adapt-authoring-mongodblogger",
+  "repository": "github:adapt-security/adapt-authoring-mongodblogger",
   "main": "index.js",
   "dependencies": {
-    "adapt-authoring-api": "github:adaptlearning/adapt-authoring-api"
+    "adapt-authoring-api": "github:adapt-security/adapt-authoring-api"
   },
   "peerDependencies": {
-    "adapt-authoring-core": "github:adaptlearning/adapt-authoring-core"
+    "adapt-authoring-core": "github:adapt-security/adapt-authoring-core"
   }
 }
