@@ -2,6 +2,11 @@
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "type": "object",
   "properties": {
+    "logInternalErrors": {
+      "type": "boolean",
+      "description": "Whether errors in the MongoLogger module should be logged using the default logger. Can cause mass logs in some cases.",
+      "default": false
+    },
     "maxLogCount": {
       "type": "number",
       "description": "The maximum number of logs stored at any one time (the oldest logs will be replace first).",
