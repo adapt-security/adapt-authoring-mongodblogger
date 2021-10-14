@@ -1,11 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$anchor": "log",
+  "description": "A system log message",
   "type": "object",
   "properties": {
     "level": {
-      "type": "string",
       "description": "The priority level of the log message",
+      "type": "string",
       "enum": [
         "debug",
         "info",
@@ -16,17 +17,17 @@
       ]
     },
     "module": {
-      "type": "string",
-      "description": "Module responsible for creating the log"
+      "description": "Module responsible for creating the log",
+      "type": "string"
     },
     "timestamp": {
+      "description": "Time log was created",
       "type": "string",
-      "format": "date-time",
-      "description": "Time log was created"
+      "format": "date-time"
     },
     "data": {
-      "type": "array",
-      "description": "The data to be logged"
+      "description": "The data to be logged",
+      "type": "array"
     }
   },
   "required": ["level"]
