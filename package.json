@@ -4,6 +4,7 @@
   "description": "Stores application log messages to the MongoDBModule instance",
   "homepage": "https://github.com/adaptlearning/adapt-authoring-mongodblogger",
   "license": "GPL-3.0",
+  "type": "module",
   "main": "index.js",
   "repository": "adapt-security/adapt-authoring-mongodblogger",
   "dependencies": {
