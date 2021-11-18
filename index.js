@@ -1,1 +1,1 @@
-module.exports = require('./lib/MongoDBLoggerModule');
+export { default } from './lib/MongoDBLoggerModule.js';
