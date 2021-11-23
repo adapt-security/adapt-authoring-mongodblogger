@@ -8,9 +8,9 @@
   "main": "index.js",
   "repository": "adapt-security/adapt-authoring-mongodblogger",
   "dependencies": {
-    "adapt-authoring-api": "adapt-security/adapt-authoring-api"
+    "adapt-authoring-api": "github:adapt-security/adapt-authoring-api"
   },
   "peerDependencies": {
-    "adapt-authoring-core": "adapt-security/adapt-authoring-core"
+    "adapt-authoring-core": "github:adapt-security/adapt-authoring-core"
   }
 }
