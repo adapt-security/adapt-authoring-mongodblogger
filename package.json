@@ -2,11 +2,11 @@
   "name": "adapt-authoring-mongodblogger",
   "version": "0.0.1",
   "description": "Stores application log messages to the MongoDBModule instance",
-  "homepage": "https://github.com/adaptlearning/adapt-authoring-mongodblogger",
+  "homepage": "https://github.com/adapt-security/adapt-authoring-mongodblogger",
   "license": "GPL-3.0",
   "type": "module",
   "main": "index.js",
-  "repository": "adapt-security/adapt-authoring-mongodblogger",
+  "repository": "github:adapt-security/adapt-authoring-mongodblogger",
   "dependencies": {
     "adapt-authoring-api": "github:adapt-security/adapt-authoring-api"
   },
