@@ -3,13 +3,13 @@
   "type": "object",
   "properties": {
     "logInternalErrors": {
-      "type": "boolean",
       "description": "Whether errors in the MongoDBLoggerModule module should be logged using the default logger. Can cause mass logs in some cases.",
+      "type": "boolean",
       "default": false
     },
     "maxLogCount": {
-      "type": "number",
       "description": "The maximum number of logs stored at any one time (the oldest logs will be replaced first).",
+      "type": "number",
       "default": 5000
     }
   }
