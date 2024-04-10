@@ -23,7 +23,8 @@
     "timestamp": {
       "description": "Time log was created",
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "isDate": true
     },
     "data": {
       "description": "The data to be logged",
