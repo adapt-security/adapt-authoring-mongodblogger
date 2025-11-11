@@ -8,6 +8,7 @@
       "description": "The priority level of the log message",
       "type": "string",
       "enum": [
+        "verbose",
         "debug",
         "info",
         "success",
