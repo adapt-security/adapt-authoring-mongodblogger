@@ -1,6 +1,6 @@
 {
   "name": "adapt-authoring-mongodblogger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Stores application log messages to the MongoDBModule instance",
   "homepage": "https://github.com/adapt-security/adapt-authoring-mongodblogger",
   "license": "GPL-3.0",
