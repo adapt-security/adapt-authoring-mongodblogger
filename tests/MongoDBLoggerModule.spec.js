@@ -12,14 +12,12 @@ import assert from 'node:assert/strict'
 const AbstractApiModule = class {
   queryHandler () { return function queryHandler () {} }
   requestHandler () { return function requestHandler () {} }
-}
-const AbstractApiUtils = {
   generateApiMetadata () {}
 }
 
 // Register the stubs before importing the module under test
 mock.module('adapt-authoring-api', {
-  namedExports: { AbstractApiModule, AbstractApiUtils }
+  namedExports: { AbstractApiModule }
 })
 mock.module('../lib/apidefs.js', {
   defaultExport: { getLogs: {}, getLog: {}, queryLogs: {} }
@@ -99,13 +97,11 @@ describe('MongoDBLoggerModule', () => {
       assert.deepEqual(route.permissions, { post: ['read:logs'] })
     })
 
-    it('should call AbstractApiUtils.generateApiMetadata', async () => {
+    it('should call this.generateApiMetadata()', async () => {
       let called = false
-      const origGenerate = AbstractApiUtils.generateApiMetadata
-      AbstractApiUtils.generateApiMetadata = () => { called = true }
+      instance.generateApiMetadata = () => { called = true }
       await instance.setValues()
       assert.ok(called, 'generateApiMetadata should have been called')
-      AbstractApiUtils.generateApiMetadata = origGenerate
     })
   })
 
