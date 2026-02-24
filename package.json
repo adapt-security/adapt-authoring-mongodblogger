@@ -14,7 +14,7 @@
     "adapt-authoring-api": "^2.0.0"
   },
   "peerDependencies": {
-    "adapt-authoring-core": "^1.7.0",
+    "adapt-authoring-core": "^2.0.0",
     "adapt-authoring-logger": "^1.1.2",
     "adapt-authoring-mongodb": "^3.0.0"
   },
