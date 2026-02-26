@@ -1,5 +1,11 @@
 import { describe, it, mock, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const routesJson = JSON.parse(readFileSync(resolve(__dirname, '../routes.json'), 'utf8'))
 
 /**
  * MongoDBLoggerModule extends AbstractApiModule which requires the full
@@ -9,18 +15,11 @@ import assert from 'node:assert/strict'
  */
 
 // Stub out the parent modules so the import succeeds
-const AbstractApiModule = class {
-  queryHandler () { return function queryHandler () {} }
-  requestHandler () { return function requestHandler () {} }
-  generateApiMetadata () {}
-}
+const AbstractApiModule = class {}
 
 // Register the stubs before importing the module under test
 mock.module('adapt-authoring-api', {
   namedExports: { AbstractApiModule }
-})
-mock.module('../lib/apidefs.js', {
-  defaultExport: { getLogs: {}, getLog: {}, queryLogs: {} }
 })
 
 const { default: MongoDBLoggerModule } = await import('../lib/MongoDBLoggerModule.js')
@@ -31,14 +30,6 @@ describe('MongoDBLoggerModule', () => {
 
     beforeEach(() => {
       instance = Object.create(MongoDBLoggerModule.prototype)
-      // Provide stubs for methods called by setValues
-      instance.queryHandler = () => function queryHandler () {}
-      instance.requestHandler = () => function requestHandler () {}
-    })
-
-    it('should set root to "logs"', async () => {
-      await instance.setValues()
-      assert.equal(instance.root, 'logs')
     })
 
     it('should set schemaName to "log"', async () => {
@@ -49,59 +40,6 @@ describe('MongoDBLoggerModule', () => {
     it('should set collectionName to "logs"', async () => {
       await instance.setValues()
       assert.equal(instance.collectionName, 'logs')
-    })
-
-    it('should define exactly 3 routes', async () => {
-      await instance.setValues()
-      assert.equal(instance.routes.length, 3)
-    })
-
-    it('should define a GET / route', async () => {
-      await instance.setValues()
-      const route = instance.routes.find(r => r.route === '/')
-      assert.ok(route, 'GET / route should exist')
-      assert.ok(route.handlers.get, 'GET / should have a get handler')
-      assert.equal(route.validate, false)
-    })
-
-    it('should define a GET /:_id route', async () => {
-      await instance.setValues()
-      const route = instance.routes.find(r => r.route === '/:_id')
-      assert.ok(route, 'GET /:_id route should exist')
-      assert.ok(route.handlers.get, '/:_id should have a get handler')
-    })
-
-    it('should define a POST /query route', async () => {
-      await instance.setValues()
-      const route = instance.routes.find(r => r.route === '/query')
-      assert.ok(route, 'POST /query route should exist')
-      assert.ok(route.handlers.post, '/query should have a post handler')
-      assert.equal(route.validate, false)
-    })
-
-    it('should set correct permissions for GET /', async () => {
-      await instance.setValues()
-      const route = instance.routes.find(r => r.route === '/')
-      assert.deepEqual(route.permissions, { get: ['read:logs'] })
-    })
-
-    it('should set correct permissions for GET /:_id', async () => {
-      await instance.setValues()
-      const route = instance.routes.find(r => r.route === '/:_id')
-      assert.deepEqual(route.permissions, { get: ['read:logs'] })
-    })
-
-    it('should set correct permissions for POST /query', async () => {
-      await instance.setValues()
-      const route = instance.routes.find(r => r.route === '/query')
-      assert.deepEqual(route.permissions, { post: ['read:logs'] })
-    })
-
-    it('should call this.generateApiMetadata()', async () => {
-      let called = false
-      instance.generateApiMetadata = () => { called = true }
-      await instance.setValues()
-      assert.ok(called, 'generateApiMetadata should have been called')
     })
   })
 
@@ -214,6 +152,44 @@ describe('MongoDBLoggerModule', () => {
 
     it('should have a logToDb method', () => {
       assert.equal(typeof MongoDBLoggerModule.prototype.logToDb, 'function')
+    })
+  })
+
+  describe('routes.json', () => {
+    it('should set root to "logs"', () => {
+      assert.equal(routesJson.root, 'logs')
+    })
+
+    it('should set useDefaultRoutes to false', () => {
+      assert.equal(routesJson.useDefaultRoutes, false)
+    })
+
+    it('should define exactly 3 routes', () => {
+      assert.equal(routesJson.routes.length, 3)
+    })
+
+    it('should define a GET / route with validate false', () => {
+      const route = routesJson.routes.find(r => r.route === '/')
+      assert.ok(route, 'GET / route should exist')
+      assert.equal(route.handlers.get, 'default')
+      assert.equal(route.validate, false)
+      assert.deepEqual(route.permissions.get, ['read:${scope}'])
+    })
+
+    it('should define a GET /:_id route', () => {
+      const route = routesJson.routes.find(r => r.route === '/:_id')
+      assert.ok(route, 'GET /:_id route should exist')
+      assert.equal(route.handlers.get, 'default')
+      assert.deepEqual(route.permissions.get, ['read:${scope}'])
+    })
+
+    it('should define a POST /query route with validate false and modifying false', () => {
+      const route = routesJson.routes.find(r => r.route === '/query')
+      assert.ok(route, 'POST /query route should exist')
+      assert.equal(route.handlers.post, 'query')
+      assert.equal(route.validate, false)
+      assert.equal(route.modifying, false)
+      assert.deepEqual(route.permissions.post, ['read:${scope}'])
     })
   })
 })

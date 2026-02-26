@@ -1,0 +1,24 @@
+{
+  "root": "logs",
+  "useDefaultRoutes": false,
+  "routes": [
+    {
+      "route": "/",
+      "validate": false,
+      "handlers": { "get": "default" },
+      "permissions": { "get": ["read:${scope}"] }
+    },
+    {
+      "route": "/:_id",
+      "handlers": { "get": "default" },
+      "permissions": { "get": ["read:${scope}"] }
+    },
+    {
+      "route": "/query",
+      "validate": false,
+      "modifying": false,
+      "handlers": { "post": "query" },
+      "permissions": { "post": ["read:${scope}"] }
+    }
+  ]
+}
