@@ -173,14 +173,14 @@ describe('MongoDBLoggerModule', () => {
       assert.ok(route, 'GET / route should exist')
       assert.equal(route.handlers.get, 'default')
       assert.equal(route.validate, false)
-      assert.deepEqual(route.permissions.get, ['read:{scope}'])
+      assert.deepEqual(route.permissions.get, ['read:${scope}'])
     })
 
     it('should define a GET /:_id route', () => {
       const route = routesJson.routes.find(r => r.route === '/:_id')
       assert.ok(route, 'GET /:_id route should exist')
       assert.equal(route.handlers.get, 'default')
-      assert.deepEqual(route.permissions.get, ['read:{scope}'])
+      assert.deepEqual(route.permissions.get, ['read:${scope}'])
     })
 
     it('should define a POST /query route with validate false and modifying false', () => {
@@ -189,7 +189,7 @@ describe('MongoDBLoggerModule', () => {
       assert.equal(route.handlers.post, 'query')
       assert.equal(route.validate, false)
       assert.equal(route.modifying, false)
-      assert.deepEqual(route.permissions.post, ['read:{scope}'])
+      assert.deepEqual(route.permissions.post, ['read:${scope}'])
     })
   })
 })
