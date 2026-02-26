@@ -1,5 +1,11 @@
 import { describe, it, mock, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const routesJson = JSON.parse(readFileSync(resolve(__dirname, '../routes.json'), 'utf8'))
 
 /**
  * MongoDBLoggerModule extends AbstractApiModule which requires the full
@@ -158,6 +164,51 @@ describe('MongoDBLoggerModule', () => {
 
     it('should have a logToDb method', () => {
       assert.equal(typeof MongoDBLoggerModule.prototype.logToDb, 'function')
+    })
+  })
+
+  describe('routes.json', () => {
+    it('should set root to "logs"', () => {
+      assert.equal(routesJson.root, 'logs')
+    })
+
+    it('should set useDefaultRoutes to false', () => {
+      assert.equal(routesJson.useDefaultRoutes, false)
+    })
+
+    it('should define exactly 3 routes', () => {
+      assert.equal(routesJson.routes.length, 3)
+    })
+
+    it('should set schemaName to "log"', () => {
+      assert.equal(routesJson.schemaName, 'log')
+    })
+
+    it('should set collectionName to "logs"', () => {
+      assert.equal(routesJson.collectionName, 'logs')
+    })
+
+    it('should define a GET / route with validate false', () => {
+      const route = routesJson.routes.find(r => r.route === '/')
+      assert.ok(route, 'GET / route should exist')
+      assert.equal(route.handlers.get, 'queryHandler')
+      assert.equal(route.validate, false)
+      assert.deepEqual(route.permissions.get, ['read:${scope}'])
+    })
+
+    it('should define a GET /:_id route', () => {
+      const route = routesJson.routes.find(r => r.route === '/:_id')
+      assert.ok(route, 'GET /:_id route should exist')
+      assert.equal(route.handlers.get, 'requestHandler')
+      assert.deepEqual(route.permissions.get, ['read:${scope}'])
+    })
+
+    it('should define a POST /query route with validate false', () => {
+      const route = routesJson.routes.find(r => r.route === '/query')
+      assert.ok(route, 'POST /query route should exist')
+      assert.equal(route.handlers.post, 'queryHandler')
+      assert.equal(route.validate, false)
+      assert.deepEqual(route.permissions.post, ['read:${scope}'])
     })
   })
 })
