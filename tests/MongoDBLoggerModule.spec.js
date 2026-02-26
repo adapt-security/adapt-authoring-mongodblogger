@@ -15,7 +15,11 @@ const routesJson = JSON.parse(readFileSync(resolve(__dirname, '../routes.json'),
  */
 
 // Stub out the parent modules so the import succeeds
-const AbstractApiModule = class {}
+const AbstractApiModule = class {
+  async setValues () {}
+  queryHandler () {}
+  requestHandler () {}
+}
 
 // Register the stubs before importing the module under test
 mock.module('adapt-authoring-api', {
@@ -30,6 +34,8 @@ describe('MongoDBLoggerModule', () => {
 
     beforeEach(() => {
       instance = Object.create(MongoDBLoggerModule.prototype)
+      // Provide stubs for methods referenced by super.setValues()
+      Object.getPrototypeOf(MongoDBLoggerModule.prototype).setValues = mock.fn(async function () {})
     })
 
     it('should set schemaName to "log"', async () => {
@@ -40,6 +46,12 @@ describe('MongoDBLoggerModule', () => {
     it('should set collectionName to "logs"', async () => {
       await instance.setValues()
       assert.equal(instance.collectionName, 'logs')
+    })
+
+    it('should call super.setValues()', async () => {
+      const superSetValues = Object.getPrototypeOf(MongoDBLoggerModule.prototype).setValues
+      await instance.setValues()
+      assert.equal(superSetValues.mock.callCount(), 1)
     })
   })
 
@@ -168,10 +180,18 @@ describe('MongoDBLoggerModule', () => {
       assert.equal(routesJson.routes.length, 3)
     })
 
+    it('should set schemaName to "log"', () => {
+      assert.equal(routesJson.schemaName, 'log')
+    })
+
+    it('should set collectionName to "logs"', () => {
+      assert.equal(routesJson.collectionName, 'logs')
+    })
+
     it('should define a GET / route with validate false', () => {
       const route = routesJson.routes.find(r => r.route === '/')
       assert.ok(route, 'GET / route should exist')
-      assert.equal(route.handlers.get, 'default')
+      assert.equal(route.handlers.get, 'queryHandler')
       assert.equal(route.validate, false)
       assert.deepEqual(route.permissions.get, ['read:${scope}'])
     })
@@ -179,16 +199,15 @@ describe('MongoDBLoggerModule', () => {
     it('should define a GET /:_id route', () => {
       const route = routesJson.routes.find(r => r.route === '/:_id')
       assert.ok(route, 'GET /:_id route should exist')
-      assert.equal(route.handlers.get, 'default')
+      assert.equal(route.handlers.get, 'requestHandler')
       assert.deepEqual(route.permissions.get, ['read:${scope}'])
     })
 
-    it('should define a POST /query route with validate false and modifying false', () => {
+    it('should define a POST /query route with validate false', () => {
       const route = routesJson.routes.find(r => r.route === '/query')
       assert.ok(route, 'POST /query route should exist')
-      assert.equal(route.handlers.post, 'query')
+      assert.equal(route.handlers.post, 'queryHandler')
       assert.equal(route.validate, false)
-      assert.equal(route.modifying, false)
       assert.deepEqual(route.permissions.post, ['read:${scope}'])
     })
   })
