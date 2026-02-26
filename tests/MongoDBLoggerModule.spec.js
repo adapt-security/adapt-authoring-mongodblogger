@@ -10,8 +10,8 @@ import assert from 'node:assert/strict'
 
 // Stub out the parent modules so the import succeeds
 const AbstractApiModule = class {
-  queryHandler () { return function queryHandler () {} }
-  requestHandler () { return function requestHandler () {} }
+  queryHandler () {}
+  requestHandler () {}
   generateApiMetadata () {}
 }
 
@@ -32,8 +32,8 @@ describe('MongoDBLoggerModule', () => {
     beforeEach(() => {
       instance = Object.create(MongoDBLoggerModule.prototype)
       // Provide stubs for methods called by setValues
-      instance.queryHandler = () => function queryHandler () {}
-      instance.requestHandler = () => function requestHandler () {}
+      instance.queryHandler = function queryHandler () {}
+      instance.requestHandler = function requestHandler () {}
     })
 
     it('should set root to "logs"', async () => {
