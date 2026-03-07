@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const routesJson = JSON.parse(readFileSync(resolve(__dirname, '../routes.json'), 'utf8'))
+const readScopes = ['read:${scope}'] // eslint-disable-line no-template-curly-in-string
 
 /**
  * MongoDBLoggerModule extends AbstractApiModule which requires the full
@@ -193,14 +194,14 @@ describe('MongoDBLoggerModule', () => {
       assert.ok(route, 'GET / route should exist')
       assert.equal(route.handlers.get, 'queryHandler')
       assert.equal(route.validate, false)
-      assert.deepEqual(route.permissions.get, ['read:${scope}'])
+      assert.deepEqual(route.permissions.get, readScopes)
     })
 
     it('should define a GET /:_id route', () => {
       const route = routesJson.routes.find(r => r.route === '/:_id')
       assert.ok(route, 'GET /:_id route should exist')
       assert.equal(route.handlers.get, 'requestHandler')
-      assert.deepEqual(route.permissions.get, ['read:${scope}'])
+      assert.deepEqual(route.permissions.get, readScopes)
     })
 
     it('should define a POST /query route with validate false', () => {
@@ -208,7 +209,7 @@ describe('MongoDBLoggerModule', () => {
       assert.ok(route, 'POST /query route should exist')
       assert.equal(route.handlers.post, 'queryHandler')
       assert.equal(route.validate, false)
-      assert.deepEqual(route.permissions.post, ['read:${scope}'])
+      assert.deepEqual(route.permissions.post, readScopes)
     })
   })
 })
