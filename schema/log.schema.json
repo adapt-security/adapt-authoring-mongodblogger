@@ -19,7 +19,8 @@
     },
     "module": {
       "description": "Module responsible for creating the log",
-      "type": "string"
+      "type": "string",
+      "isSearchable": true
     },
     "timestamp": {
       "description": "Time log was created",
@@ -29,7 +30,8 @@
     },
     "data": {
       "description": "The data to be logged",
-      "type": "array"
+      "type": "array",
+      "isSearchable": true
     }
   },
   "required": ["level"]

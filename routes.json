@@ -56,6 +56,27 @@
       }
     },
     {
+      "route": "/modules",
+      "handlers": { "get": "queryModules" },
+      "permissions": { "get": ["read:${scope}"] },
+      "meta": {
+        "get": {
+          "summary": "List logged modules",
+          "description": "Returns the distinct module names present in the logs, for filtering.",
+          "responses": {
+            "200": {
+              "description": "Distinct module names",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "route": "/:_id",
       "handlers": { "get": "requestHandler" },
       "permissions": { "get": ["read:${scope}"] },
