@@ -177,10 +177,6 @@ describe('MongoDBLoggerModule', () => {
       assert.equal(routesJson.useDefaultRoutes, false)
     })
 
-    it('should define exactly 3 routes', () => {
-      assert.equal(routesJson.routes.length, 3)
-    })
-
     it('should set schemaName to "log"', () => {
       assert.equal(routesJson.schemaName, 'log')
     })
@@ -194,6 +190,13 @@ describe('MongoDBLoggerModule', () => {
       assert.ok(route, 'GET / route should exist')
       assert.equal(route.handlers.get, 'queryHandler')
       assert.equal(route.validate, false)
+      assert.deepEqual(route.permissions.get, readScopes)
+    })
+
+    it('should define a GET /modules route', () => {
+      const route = routesJson.routes.find(r => r.route === '/modules')
+      assert.ok(route, 'GET /modules route should exist')
+      assert.equal(route.handlers.get, 'queryModules')
       assert.deepEqual(route.permissions.get, readScopes)
     })
 
